@@ -1,4 +1,4 @@
-// Realistic, hand-crafted demo/fallback content used when ANTHROPIC_API_KEY is not set
+// Realistic, hand-crafted demo/fallback content used when GEMINI_API_KEY is not set
 // or when a live call fails. Keeps the whole app fully demoable without a real API key.
 
 function topicKey(topic = '') {
@@ -113,7 +113,7 @@ function demoExplain(topic, subject = 'General', level = 'Intermediate') {
   const t = topic && topic.trim() ? topic.trim() : 'this topic';
   return `## ${t} (${subject})
 
-**Definition:** ${t} is an important concept in ${subject}. In demo mode, this is a template explanation — connect a real ANTHROPIC_API_KEY to get a fully tailored, AI-generated answer for "${t}".
+**Definition:** ${t} is an important concept in ${subject}. In demo mode, this is a template explanation — connect a real GEMINI_API_KEY to get a fully tailored, AI-generated answer for "${t}".
 
 **Why it is needed:** Understanding ${t} helps build a strong foundation in ${subject} and is commonly tested in university exams and interviews.
 
@@ -139,7 +139,7 @@ function demoSummarize(text) {
   const rich = findRichTopic(text);
   if (rich) return rich.summary;
   const preview = (text || '').slice(0, 120).trim();
-  return `**Short summary:** This is a demo-mode summary of the material you pasted (starting with: "${preview}${text && text.length > 120 ? '...' : ''}"). Connect a real ANTHROPIC_API_KEY for a genuine AI-generated summary of your exact content.
+  return `**Short summary:** This is a demo-mode summary of the material you pasted (starting with: "${preview}${text && text.length > 120 ? '...' : ''}"). Connect a real GEMINI_API_KEY for a genuine AI-generated summary of your exact content.
 
 **Key points:**
 - Point 1 extracted from your material (demo placeholder)
@@ -160,7 +160,7 @@ function demoAsk(question, subject = 'General', level = 'Intermediate', style = 
 
 Thanks for your question: *"${question}"*
 
-This is a **demo-mode response** because no ANTHROPIC_API_KEY is configured on the backend. Once a real key is added to \`backend/.env\`, this exact question will be answered live by Claude with a fully personalized, well-structured explanation tailored to your selected subject, learning level, and response style.
+This is a **demo-mode response** because no GEMINI_API_KEY is configured on the backend. Once a real key is added to \`backend/.env\`, this exact question will be answered live by Gemini with a fully personalized, well-structured explanation tailored to your selected subject, learning level, and response style.
 
 **What a live answer would include:**
 - A clear, direct definition/answer to your question
@@ -240,7 +240,7 @@ function demoQuizQuestions(subject = 'General', topic = '', difficulty = 'Medium
           `Plausible but incorrect option C`,
         ],
         correctAnswer: `Correct concept related to ${t}`,
-        explanation: `This is a demo placeholder question. With a real ANTHROPIC_API_KEY, unique, accurate ${difficulty}-level questions about "${t}" would be generated.`,
+        explanation: `This is a demo placeholder question. With a real GEMINI_API_KEY, unique, accurate ${difficulty}-level questions about "${t}" would be generated.`,
       });
     }
   }

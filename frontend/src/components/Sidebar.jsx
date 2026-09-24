@@ -13,6 +13,8 @@ import {
   Info,
   X,
 } from 'lucide-react';
+import Logo from './Logo';
+import { useUser } from '../context/UserContext';
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -29,6 +31,7 @@ const links = [
 ];
 
 export default function Sidebar({ open, onClose }) {
+  const { user } = useUser();
   return (
     <>
       {open && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={onClose} />}
@@ -39,10 +42,8 @@ export default function Sidebar({ open, onClose }) {
       >
         <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-white font-bold">
-              AI
-            </div>
-            <span className="font-bold text-lg">LearnAI</span>
+            <Logo size={36} />
+            <span className="font-bold text-lg">Study With AI</span>
           </div>
           <button className="lg:hidden p-1" onClick={onClose}>
             <X size={20} />
@@ -67,9 +68,15 @@ export default function Sidebar({ open, onClose }) {
             </NavLink>
           ))}
         </nav>
-        <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-400">
-          <p>Shaik Shafi · 92410133016</p>
-          <p>Batch 7EK2</p>
+        <div className="flex items-center gap-2.5 px-5 py-4 border-t border-gray-100 dark:border-gray-800">
+          {user.picture ? (
+            <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 flex items-center justify-center text-sm font-semibold">
+              {user.name?.charAt(0) || 'U'}
+            </div>
+          )}
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{user.name}</p>
         </div>
       </aside>
     </>

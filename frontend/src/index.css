@@ -19,8 +19,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(99, 102, 241, 0.4);
+  background-color: rgba(23, 124, 111, 0.4);
   border-radius: 8px;
+}
+
+.font-display {
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
+  font-feature-settings: 'ss01' on;
 }
 
 .card {

@@ -1,24 +1,13 @@
-import React, { useState } from 'react';
-import { Save, User, Moon, Sun, Info } from 'lucide-react';
+import React from 'react';
+import { Moon, Sun, User } from 'lucide-react';
 import Layout from '../components/Layout';
 import Card from '../components/Card';
-import DemoBadge from '../components/DemoBadge';
 import { useUser } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
-import { useDemoMode } from '../hooks/useDemoMode';
 
 export default function Settings() {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
-  const { demoMode, dbConnected, backendOnline } = useDemoMode();
-  const [form, setForm] = useState(user);
-  const [saved, setSaved] = useState(false);
-
-  const save = () => {
-    setUser(form);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
 
   return (
     <Layout title="Settings">
@@ -39,60 +28,19 @@ export default function Settings() {
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <User size={18} className="text-brand-500" />
-            <h3 className="font-semibold">Student Profile</h3>
+            <h3 className="font-semibold">Account</h3>
           </div>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="flex items-center gap-4">
+            {user.picture ? (
+              <img src={user.picture} alt={user.name} className="w-14 h-14 rounded-full object-cover" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 flex items-center justify-center text-xl font-semibold">
+                {user.name?.charAt(0) || 'U'}
+              </div>
+            )}
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Name</label>
-              <input className="input-field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Roll Number</label>
-              <input className="input-field" value={form.rollNumber} onChange={(e) => setForm({ ...form, rollNumber: e.target.value })} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Batch</label>
-              <input className="input-field" value={form.batch} onChange={(e) => setForm({ ...form, batch: e.target.value })} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
-              <input className="input-field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-gray-500 mb-1">Learning Level</label>
-              <select className="input-field" value={form.learningLevel} onChange={(e) => setForm({ ...form, learningLevel: e.target.value })}>
-                {['Beginner', 'Intermediate', 'Advanced'].map((l) => (
-                  <option key={l}>{l}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <button onClick={save} className="btn-primary mt-4">
-            <Save size={16} /> {saved ? 'Saved!' : 'Save Changes'}
-          </button>
-        </Card>
-
-        <Card>
-          <div className="flex items-center gap-2 mb-4">
-            <Info size={18} className="text-brand-500" />
-            <h3 className="font-semibold">System Status</h3>
-          </div>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-500">AI Mode</span>
-              <DemoBadge inline />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-500">Backend Connection</span>
-              <span className={backendOnline ? 'text-emerald-600' : 'text-red-600'}>
-                {backendOnline ? 'Connected' : 'Offline'}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-500">Database</span>
-              <span className={dbConnected ? 'text-emerald-600' : 'text-amber-600'}>
-                {dbConnected ? 'Connected (MongoDB)' : 'Not connected (using demo/session data)'}
-              </span>
+              <p className="font-semibold text-gray-900 dark:text-white">{user.name}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
             </div>
           </div>
         </Card>
