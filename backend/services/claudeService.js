@@ -3,7 +3,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const API_KEY = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim();
 const DEMO_MODE = !API_KEY;
 
-const MODEL = 'gemini-3.6-flash';
+const MODEL = 'gemini-2.5-flash';
 
 let genAI = null;
 let model = null;
@@ -23,7 +23,13 @@ and Markdown formatting where helpful. Be encouraging and supportive in tone.`;
  * is configured or if the API call fails for any reason (never throws to the caller
  * in a way that crashes the request — callers should still provide a demo fallback).
  */
-async function callClaude(userPrompt, { maxTokens = 1500 } = {}) {
+const RETRYABLE_STATUSES = [429, 500, 503];
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function callClaude(userPrompt, { maxTokens = 1500, retries = 2 } = {}) {
   if (DEMO_MODE) {
     throw new Error('DEMO_MODE_NO_KEY');
   }
@@ -34,8 +40,20 @@ async function callClaude(userPrompt, { maxTokens = 1500 } = {}) {
       generationConfig: { maxOutputTokens: maxTokens },
     });
   }
-  const result = await model.generateContent(userPrompt);
-  return result.response.text();
+
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const result = await model.generateContent(userPrompt);
+      return result.response.text();
+    } catch (err) {
+      lastErr = err;
+      const isRetryable = RETRYABLE_STATUSES.includes(err.status) || /503|overloaded|high demand/i.test(err.message || '');
+      if (!isRetryable || attempt === retries) break;
+      await sleep(500 * (attempt + 1));
+    }
+  }
+  throw lastErr;
 }
 
 module.exports = { callClaude, DEMO_MODE, SYSTEM_PROMPT, MODEL };

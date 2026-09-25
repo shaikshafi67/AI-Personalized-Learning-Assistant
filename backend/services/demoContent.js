@@ -160,7 +160,7 @@ function demoAsk(question, subject = 'General', level = 'Intermediate', style = 
 
 Thanks for your question: *"${question}"*
 
-This is a **demo-mode response** because no GEMINI_API_KEY is configured on the backend. Once a real key is added to \`backend/.env\`, this exact question will be answered live by Gemini with a fully personalized, well-structured explanation tailored to your selected subject, learning level, and response style.
+This is a **demo-mode response** because the AI service is temporarily unavailable (either no GEMINI_API_KEY is configured, or Gemini is currently busy). Once available, this exact question will be answered live by Gemini with a fully personalized, well-structured explanation tailored to your selected subject, learning level, and response style.
 
 **What a live answer would include:**
 - A clear, direct definition/answer to your question
